@@ -1,0 +1,24 @@
+from sklearn.datasets import make_blobs
+import numpy as np
+
+# Create synthetic clustering dataset
+X, y = make_blobs(n_samples=100, centers=3, n_features=2, random_state=42)
+
+print("Synthetic Clustering Dataset Summary\n")
+
+# Number of data points
+print("Total Data Points:", X.shape[0])
+
+# Number of features
+print("Number of Features:", X.shape[1])
+
+# Number of clusters
+print("Number of Clusters:", len(set(y)))
+
+# Display first 5 data points
+print("\nFirst 5 Data Points:")
+print(X[:5])
+
+# Summary statistics
+print("\nMean of Features:")
+print(np.mean(X, axis=0))
