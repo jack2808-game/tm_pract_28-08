@@ -1,0 +1,46 @@
+py -m pip install scikit-learn
+py -m pip install --upgrade pip
+
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.feature_extraction import DictVectorizer
+
+# Training data
+data = [
+    [("John", "O"), ("is", "O"), ("a", "O"), ("Software", "JOB"), ("Engineer", "JOB")],
+    [("Alice", "O"), ("worked", "O"), ("as", "O"), ("Data", "JOB"), ("Scientist", "JOB")],
+]
+
+# Feature function
+def get_features(sent, i):
+    word = sent[i][0]
+    return {
+        'word': word.lower(),
+        'is_cap': word[0].isupper(),
+        'prev': sent[i-1][0].lower() if i > 0 else "<START>",
+        'next': sent[i+1][0].lower() if i < len(sent)-1 else "<END>",
+    }
+
+# Prepare training
+X, y = [], []
+for sent in data:
+    for i in range(len(sent)):
+        X.append(get_features(sent, i))
+        y.append(sent[i][1])
+
+vec = DictVectorizer(sparse=False)
+X_vec = vec.fit_transform(X)
+clf = LogisticRegression(max_iter=200)
+clf.fit(X_vec, y)
+
+# Prediction function
+def predict(sent):
+    tokens = [(w, "O") for w in sent]
+    feats = [get_features(tokens, i) for i in range(len(tokens))]
+    return clf.predict(vec.transform(feats))
+
+# Test sentence
+test = ["David", "is", "a", "Machine", "Learning", "Engineer"]
+predicted = predict(test)
+for w, tag in zip(test, predicted):
+    print(f"{w}: {tag}") 
