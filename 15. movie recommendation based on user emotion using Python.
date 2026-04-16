@@ -1,0 +1,41 @@
+# -----------------------------
+# Movie Dataset based on Emotion
+# -----------------------------
+movies = {
+    "happy": [
+        "3 Idiots",
+        "The Intern",
+        "Zindagi Na Milegi Dobara"
+    ],
+    "sad": [
+        "The Pursuit of Happyness",
+        "Taare Zameen Par",
+        "Hachi: A Dog's Tale"
+    ],
+    "excited": [
+        "Avengers",
+        "Mission Impossible",
+        "Fast and Furious"
+    ],
+    "romantic": [
+        "Titanic",
+        "The Notebook",
+        "Dilwale Dulhania Le Jayenge"
+    ]
+}
+
+# -----------------------------
+# User Emotion
+# -----------------------------
+user_emotion = input("Enter your emotion (happy/sad/excited/romantic): ").lower()
+
+# -----------------------------
+# Recommendation Logic
+# -----------------------------
+print("\nMovie Recommendations:")
+
+if user_emotion in movies:
+    for movie in movies[user_emotion]:
+        print("-", movie)
+else:
+    print("Sorry, no movies found for this emotion.")
