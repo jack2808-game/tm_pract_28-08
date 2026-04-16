@@ -1,0 +1,56 @@
+cmd:
+python -m pip install nltk
+
+code:
+import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')   # needed in newer NLTK
+nltk.download('wordnet')
+nltk.download('omw-1.4')     # for better lemmatization
+nltk.download('averaged_perceptron_tagger_eng')
+nltk.download('maxent_ne_chunker')
+nltk.download('maxent_ne_chunker_tab')
+nltk.download('words')
+from nltk.tokenize import word_tokenize
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+from nltk import pos_tag, ne_chunk
+
+
+#nltk.download('punkt')
+#nltk.download('wordnet')
+#nltk.download('averaged_perceptron_tagger_eng')
+#nltk.download('maxent_ne_chunker')
+#nltk.download('maxent_ne_chunker_tab')
+#nltk.download('words')
+text = "Ratan Tata founded Tata Group in India and he is leading business growth"
+
+print("Input Text:")
+print(text)
+
+
+# Tokenization
+tokens = word_tokenize(text)
+print("\nTokens:")
+print(tokens)
+
+# 1. Stemming
+stemmer = PorterStemmer()
+stemmed_words = [stemmer.stem(word) for word in tokens]
+print("\n1. Stemming:")
+print(stemmed_words)
+
+# 2. Lemmatization
+lemmatizer = WordNetLemmatizer()
+lemmatized_words = [lemmatizer.lemmatize(word) for word in tokens]
+print("\n2. Lemmatization:")
+print(lemmatized_words)
+
+# 3. POS Tagging
+pos_tags = pos_tag(tokens, lang='eng')
+print("\n3. POS Tagging:")
+print(pos_tags)
+
+# 4. Named Entity Recognition
+ner_tree = ne_chunk(pos_tags)
+print("\n4. Named Entity Recognition:")
+print(ner_tree)
