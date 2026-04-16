@@ -1,0 +1,15 @@
+from sklearn.datasets import make_blobs
+from sklearn.cluster import Birch
+
+# Create synthetic dataset
+X, y = make_blobs(n_samples=100, centers=3, n_features=2, random_state=42)
+
+# Initialize BIRCH model
+birch_model = Birch(n_clusters=3)
+
+# Fit the model on training data and predict clusters
+labels = birch_model.fit_predict(X)
+
+print("BIRCH Clustering Result\n")
+print("Cluster labels for each data point:\n")
+print(labels)
