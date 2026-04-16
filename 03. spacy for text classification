@@ -1,0 +1,19 @@
+# Install in CMD:
+# pip install spacy
+#py -m pip install spacy
+
+import spacy
+
+# Load English model
+nlp = spacy.blank("en")
+
+# Texts
+text1 = "I love this product"
+text2 = "This is bad"
+
+# Simple Text Classification
+if "love" in text1:
+    print("Text1 = Positive")
+
+if "bad" in text2:
+    print("Text2 = Negative")
