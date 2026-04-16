@@ -1,0 +1,34 @@
+py -m pip install spacy PyPDF2
+py -m spacy download en_core_web_sm
+
+import PyPDF2
+import spacy
+
+# -----------------------------
+# Step 1: Load pre-trained NLP model
+# -----------------------------
+nlp = spacy.load("en_core_web_sm")  # Pre-trained NER model
+
+# -----------------------------
+# Step 2: Read unstructured text from PDF
+# -----------------------------
+pdf_path = r"C:\Users\abc\OneDrive\Desktop\file1.pdf"  # Your PDF file
+text = ""
+with open(pdf_path, "rb") as file:
+    reader = PyPDF2.PdfReader(file)
+    for page in reader.pages:
+        page_text = page.extract_text()
+        if page_text:
+            text += page_text + " "
+
+# -----------------------------
+# Step 3: Process text with NER
+# -----------------------------
+doc = nlp(text)
+
+# -----------------------------
+# Step 4: Extract and display entities
+# -----------------------------
+print("Extracted Entities:\n")
+for ent in doc.ents:
+    print(f"{ent.text} -> {ent.label_}")
