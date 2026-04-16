@@ -1,0 +1,35 @@
+import re
+from collections import Counter
+
+text = "Hello! I am learning Python. Python is easy."
+
+# 1 Sentence Tokenization
+print("Sentence Tokenization:")
+print(re.split(r'[.!?]', text))
+
+# 2 Word Tokenization
+words = text.split()
+print("\nWord Tokenization:")
+print(words)
+
+# 3 Frequency Distribution
+print("\nFrequency Distribution:")
+print(Counter(words))
+
+# 4 Finding Stopwords
+stop = ["i","am","is"]
+print("\nFinding Stopwords:")
+print([w for w in words if w.lower().strip(".!?") in stop])
+
+# 5 Removing Stopwords
+print("\nRemoving Stopwords:")
+print([w for w in words if w.lower().strip(".!?") not in stop])
+
+# 6 Removing Punctuation
+print("\nRemoving Punctuation:")
+print(re.sub(r'[^\w\s]', '', text))
+
+# 7 TM Preprocessing
+clean = re.sub(r'[^\w\s]', '', text).lower().split()
+print("\nTM Preprocessing:")
+print(clean)
