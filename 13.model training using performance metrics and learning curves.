@@ -1,0 +1,79 @@
+py -m pip install PyPDF2 matplotlib scikit-learn
+
+import PyPDF2
+import matplotlib.pyplot as plt
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split, learning_curve
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# Step 1: Extract text from PDF
+pdf_path = "file2.pdf"
+text = ""
+
+with open(pdf_path, "rb") as file:
+    reader = PyPDF2.PdfReader(file)
+
+    for page in reader.pages:
+        page_text = page.extract_text()
+        if page_text:
+            text += page_text + " "
+
+# Step 2: Split into sentences
+sentences = text.split(".")
+sentences = [s.strip() for s in sentences if len(s.strip()) > 5]
+
+# Step 3: Dummy labels (for practice only)
+labels = [0 if i % 2 == 0 else 1 for i in range(len(sentences))]
+
+# Safety check
+if len(sentences) < 10:
+    raise ValueError("Not enough text data in PDF to train model")
+
+# Step 4: TF-IDF
+vectorizer = TfidfVectorizer(stop_words='english')
+X = vectorizer.fit_transform(sentences)
+y = labels
+
+# Step 5: Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Step 6: Train model
+model = MultinomialNB()
+model.fit(X_train, y_train)
+
+# Step 7: Prediction
+y_pred = model.predict(X_test)
+
+# Step 8: Metrics (FIXED)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred, zero_division=0)
+recall = recall_score(y_test, y_pred, zero_division=0)
+f1 = f1_score(y_test, y_pred, zero_division=0)
+
+print("Model Performance")
+print("----------------------")
+print("Accuracy :", accuracy)
+print("Precision:", precision)
+print("Recall   :", recall)
+print("F1 Score :", f1)
+
+# Step 9: Learning curve (FIXED cv)
+train_sizes, train_scores, test_scores = learning_curve(
+    model, X, y, cv=3, scoring='accuracy'
+)
+
+train_scores_mean = train_scores.mean(axis=1)
+test_scores_mean = test_scores.mean(axis=1)
+
+plt.plot(train_sizes, train_scores_mean, label="Training Score")
+plt.plot(train_sizes, test_scores_mean, label="Validation Score")
+
+plt.title("Learning Curve")
+plt.xlabel("Training Size")
+plt.ylabel("Accuracy")
+plt.legend()
+plt.show()
