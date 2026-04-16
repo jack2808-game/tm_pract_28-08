@@ -1,0 +1,34 @@
+books = [
+    {"title": "Python Programming Basics", "interest": "Python"},
+    {"title": "Advanced Python Concepts", "interest": "Python"},
+    {"title": "Machine Learning Fundamentals", "interest": "Machine Learning"},
+    {"title": "Data Science with Python", "interest": "Python"},
+    {"title": "Web Development Essentials", "interest": "Web Development"},
+    {"title": "Artificial Intelligence Overview", "interest": "AI"}
+]
+
+# -----------------------------
+# User Interest
+# -----------------------------
+user_interest = "Python"
+
+# -----------------------------
+# Recommendation Logic
+# -----------------------------
+recommended_books = []
+
+for book in books:
+    if book["interest"] == user_interest:
+        recommended_books.append(book["title"])
+
+# -----------------------------
+# Output
+# -----------------------------
+print("User Interest:", user_interest)
+print("\nRecommended Books:")
+
+if recommended_books:
+    for book in recommended_books:
+        print("-", book)
+else:
+    print("No books found for this interest.")
