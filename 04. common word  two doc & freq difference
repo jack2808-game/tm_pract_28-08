@@ -1,0 +1,30 @@
+#py -m pip install PyPDF2
+
+from PyPDF2 import PdfReader
+from collections import Counter
+import re
+
+def get_words(pdf_file):
+    reader = PdfReader(pdf_file)
+    text = ""
+
+    for page in reader.pages:
+        text += page.extract_text()
+
+    words = re.findall(r'\b[a-z]+\b', text.lower())
+    return Counter(words)
+
+# Correct Path
+file1 = r"C:\Users\abc\OneDrive\Desktop\file1.pdf"
+file2 = r"C:\Users\abc\OneDrive\Desktop\file2.pdf"
+
+c1 = get_words(file1)
+c2 = get_words(file2)
+
+common = set(c1) & set(c2)
+
+print("Word\tPDF1\tPDF2\tDifference")
+print("-" * 35)
+
+for word in common:
+    print(word, "\t", c1[word], "\t", c2[word], "\t", c1[word] - c2[word])
