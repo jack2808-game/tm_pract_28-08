@@ -1,0 +1,58 @@
+cmd:
+python -m pip install hmmlearn
+
+code:
+# Install required libraries
+# pip install nltk hmmlearn PyPDF2
+
+import nltk
+from hmmlearn import hmm
+import numpy as np
+import PyPDF2
+
+# Download tokenizer if not already
+nltk.download('punkt')
+
+# Step 1: Read text from PDF
+pdf_path = "file1.pdf"  # Replace with your PDF path
+text = ""
+with open(pdf_path, "rb") as file:
+    reader = PyPDF2.PdfReader(file)
+    for page in reader.pages:
+        page_text = page.extract_text()
+        if page_text:
+            text += page_text + " "
+
+# Step 2: Tokenize text
+tokens = nltk.word_tokenize(text)
+
+# Build vocabulary mapping
+vocab = list(set(tokens))
+word_to_idx = {word: i for i, word in enumerate(vocab)}
+idx_to_word = {i: word for word, i in word_to_idx.items()}
+
+# Convert tokens to numeric observations
+observations = np.array([word_to_idx[w] for w in tokens]).reshape(-1, 1)
+
+# Step 3: Define HMM (unsupervised)
+n_states = 4  # Can interpret as PERSON, ORG, LOC, O
+model = hmm.MultinomialHMM(n_components=n_states, n_iter=50, tol=0.01, random_state=42)
+
+# Train model using Baum-Welch
+model.fit(observations)
+
+# Step 4: Decode hidden states
+logprob, hidden_states = model.decode(observations, algorithm="viterbi")
+
+print("\nTokens and Hidden States:")
+for word, state in zip(tokens, hidden_states):
+    print(f"{word} -> State {state}")
+
+# Step 5: Group words by hidden states (clusters)
+clusters = {}
+for word, state in zip(tokens, hidden_states):
+    clusters.setdefault(state, []).append(word)
+
+print("\nDiscovered clusters of words (HMM Hidden States):")
+for state, words in clusters.items():
+    print(f"State {state}: {words[:10]} ...")  # show first 10 words per cluster for readability
