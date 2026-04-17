@@ -1,3 +1,9 @@
+py -m pip install scikit-learn
+pip install numpy
+pip install scipy
+matplotlib
+
+
 from sklearn.datasets import make_blobs
 from sklearn.cluster import Birch
 
